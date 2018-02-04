@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <!-- Used for formatting time into written month/year format -->
+    <script src="https://d3js.org/d3-time-format.v2.min.js"></script>
+  </head>
+
+  <style>
+
+    body {
+      background-color: red;
+    }
+
+  </style>
+
+  <body>
+
+    <div id="chart"></div>
+    <script>
+
+    var url= 'https://min-api.cryptocompare.com/data/pricehistorical?fsym=ETH&tsyms=BTC,USD,EUR&ts=1452680400&extraParams=your_app_name';
+
+    var coinValue = [];
+    var dates = [];
+
+
+  /*  d3.json("data.json").get(function(error, d){
+     for (var i = 0; i < d.data.length; i++) {
+     money.push(d.data[i][1]);
+     dates.push(new Date(d.data[i][0]));
+   }
+  */
+
+  /*  d3.json('https://min-api.cryptocompare.com/data/pricehistorical?fsym=ETH&tsyms=BTC,USD,EUR&ts=1452680400&extraParams=your_app_name').get(function(error, d) {
+      for(var i = 0; i < d.ETH.length; i++) {
+        coinValue.push(d.ETH.USD);
+        console.log(url);
+        //dates.push(new Date(d.data[i][0]));
+      }
+    });
+
+
+    console.log(coinValue);
+    */
+
+    d3.json("https://min-api.cryptocompare.com/data/pricehistorical?fsym=ETH&tsyms=BTC,USD,EUR&ts=1452680400&extraParams=your_app_name").get(function(data) {
+      console.log(data);
+    });
+
+
+
+    </script>
+  </body>
+</html>
