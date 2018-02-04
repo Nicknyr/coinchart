@@ -22,10 +22,17 @@
     <div id="chart"></div>
     <script>
 
-    var url= 'https://min-api.cryptocompare.com/data/pricehistorical?fsym=ETH&tsyms=BTC,USD,EUR&ts=1452680400&extraParams=your_app_name';
 
+    // Gets current price for Etherium
+    var url= 'https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=BTC,USD,EUR';
     var coinValue = [];
     var dates = [];
+
+    d3.json(url).get(function(error, d) {
+        coinValue.push(d.USD);
+    });
+
+    console.log(coinValue);
 
 
   /*  d3.json("data.json").get(function(error, d){
@@ -35,21 +42,9 @@
    }
   */
 
-  /*  d3.json('https://min-api.cryptocompare.com/data/pricehistorical?fsym=ETH&tsyms=BTC,USD,EUR&ts=1452680400&extraParams=your_app_name').get(function(error, d) {
-      for(var i = 0; i < d.ETH.length; i++) {
-        coinValue.push(d.ETH.USD);
-        console.log(url);
-        //dates.push(new Date(d.data[i][0]));
-      }
-    });
 
 
-    console.log(coinValue);
-    */
 
-    d3.json("https://min-api.cryptocompare.com/data/pricehistorical?fsym=ETH&tsyms=BTC,USD,EUR&ts=1452680400&extraParams=your_app_name").get(function(data) {
-      console.log(data);
-    });
 
 
 
