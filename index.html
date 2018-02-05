@@ -48,13 +48,15 @@
       }
     });
 
-    console.log(coinValue);
+    //console.log(coinValue);
 
     // Currents Unix timestamp to 2018-02-05 format
-    var myDate = new Date(1517788800 * 1000);
-    console.log(myDate);
+    function convertUnixTime(unixDate) {
+      var myDate = new Date(unixDate * 1000);
+      return myDate;
+    }
 
-
+    console.log(convertUnixTime(1517788800));
 
 
     </script>
