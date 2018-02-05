@@ -30,6 +30,13 @@
      https://min-api.cryptocompare.com/data/histoday?fsym=IOT&tsym=USD&limit=2&aggregate=3&e=CCCAGG
   */
 
+  /*  d3.json("data.json").get(function(error, d){
+     for (var i = 0; i < d.data.length; i++) {
+     money.push(d.data[i][1]);
+     dates.push(new Date(d.data[i][0]));
+   }
+  */
+
     var url= 'https://min-api.cryptocompare.com/data/histoday?fsym=IOT&tsym=USD&limit=2&aggregate=3&e=CCCAGG';
     var coinValue = [];
     var dates = [];
@@ -43,13 +50,10 @@
 
     console.log(coinValue);
 
+    // Currents Unix timestamp to 2018-02-05 format
+    var myDate = new Date(1517788800 * 1000);
+    console.log(myDate);
 
-  /*  d3.json("data.json").get(function(error, d){
-     for (var i = 0; i < d.data.length; i++) {
-     money.push(d.data[i][1]);
-     dates.push(new Date(d.data[i][0]));
-   }
-  */
 
 
 
