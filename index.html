@@ -40,15 +40,18 @@
     var url= 'https://min-api.cryptocompare.com/data/histoday?fsym=IOT&tsym=USD&limit=2&aggregate=3&e=CCCAGG';
     var coinValue = [];
     var dates = [];
-
-  // Stores closing daily prices for IOT
-    d3.json(url).get(function(error, d) {
-      for(var i = 0; i < d.Data.length; i++) {
-        coinValue.push(d.Data[i].close);
-      }
-    });
-
-    //console.log(coinValue);
+    var margin = { top: 0, right: 30, bottom: 90, left: 80 };
+    var height = 500 - margin.top - margin.bottom;
+    var width = 1000 - margin.left - margin.right;
+    var tempColor;
+    var yScale;
+    var xScale;
+    var colors;
+    var myChart;
+    var yAxisValues;
+    var yAxisTicks;
+    var xAxisValues;
+    var xAxisTicks;
 
     // Currents Unix timestamp to 2018-02-05 format
     function convertUnixTime(unixDate) {
@@ -56,7 +59,112 @@
       return myDate;
     }
 
-    console.log(convertUnixTime(1517788800));
+  // Stores closing daily prices for IOT
+    d3.json(url).get(function(error, d) {
+      for(var i = 0; i < d.Data.length; i++) {
+        coinValue.push(d.Data[i].close);
+        dates.push(convertUnixTime(d.Data[i].time));
+      }
+    });
+
+    console.log(coinValue);
+    console.log(dates);
+
+
+
+    yScale = d3.scaleLinear()
+      .domain([0, d3.max(coinValue)])
+      .range([0, height]);
+
+    // Used for Y axis guide
+    yAxisValues = d3.scaleLinear()
+      .domain([0, d3.max(coinValue)])
+      // Adjust number to adjust height of Y axis/thousands of billions
+      .range([height, 25]);
+
+    yAxisTicks = d3.axisLeft(yAxisValues)
+      .ticks(10)
+
+
+    xScale = d3.scaleBand()
+      .domain(coinValue)
+      .paddingInner(.2)
+      .paddingOuter(.3)
+      .range([0, width]);
+
+    // Used for X axis guide
+    xAxisValues = d3.scaleTime()
+      .domain([dates[0], dates[(dates.length - 1)]])
+      .range([0, width])
+
+    xAxisTicks = d3.axisBottom(xAxisValues)
+      .ticks(d3.timeYear.every(5))
+       colors = d3.scaleLinear()
+      .domain([0, coinValue.length * .33,
+        coinValue.length * .66,
+        coinValue.length
+      ])
+      //.range(['#8e44ad', '#2ecc71', '#3498db', '#d35400']) Rainbow color effect
+
+    var tooltip = d3.select('body')
+      .append('div')
+      .style('position', 'absolute')
+      .style('padding', '0 10px')
+      .style('background', 'white')
+      .style('opacity', 0)
+
+      myChart =
+        d3.select('#chart').append('svg')
+        .attr('width', width + margin.left + margin.right)
+        .attr('height', height + margin.top + margin.bottom)
+        .style('background', 'whitesmoke')
+        .style('box-shadow', '2px 2px 2px 1px rgba(0, 0, 0, .5)')
+        .append('g')
+        .attr('transform',
+         'translate(' + margin.left + ',0)')
+            .selectAll('rect')
+            .data(coinValue)
+            .enter().append('rect')
+            // Solid green bars
+            .style('fill', '#2ecc71')
+            .attr('fill', function(d, i){
+               return colors(i);
+             })
+            .attr('width', function(){
+                 return xScale.bandwidth();
+               })
+            .attr('height', 0)
+            .attr('x', function(d){
+                return xScale(d);
+             })
+            .attr('y', height)
+
+
+    // Y axis guide
+    yGuide = d3.select('#chart svg').append('g')
+      //.attr('transform', 'translate(40, 0)')
+      .attr('transform', 'translate(' + margin.left + ', 0)')
+      .call(yAxisTicks)
+      .style('stroke','#34495e')
+    xGuide = d3.select('#chart svg').append('g')
+      //.attr('transform', 'translate(40,' + height + ')')
+      .attr('transform', 'translate(' + margin.left + ', ' + height + ')')
+      .call(xAxisTicks)
+      .style('stroke','#34495e')
+    myChart.transition()
+      .attr('height', function(d){
+        return yScale(d);
+      })
+    .attr('y', function(d){
+       return height - yScale(d);
+    })
+    .delay(function(d, i){
+       return i * 20;
+    })
+    .duration(10)
+    //.ease(d3.easeBounceOut)
+
+
 
 
     </script>
