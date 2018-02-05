@@ -12,7 +12,7 @@
   <style>
 
     body {
-      background-color: red;
+      background-color: darkslategrey;
     }
 
   </style>
@@ -22,14 +22,23 @@
     <div id="chart"></div>
     <script>
 
+  //https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=BTC,USD,EUR
 
-    // Gets current price for Etherium
-    var url= 'https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=BTC,USD,EUR';
+  /* Iota prices for the last week
+     Limit=2 is approximately 7 days
+     CCCAGG is cryptocompare's stats
+     https://min-api.cryptocompare.com/data/histoday?fsym=IOT&tsym=USD&limit=2&aggregate=3&e=CCCAGG
+  */
+
+    var url= 'https://min-api.cryptocompare.com/data/histoday?fsym=IOT&tsym=USD&limit=2&aggregate=3&e=CCCAGG';
     var coinValue = [];
     var dates = [];
 
+  // Stores closing daily prices for IOT
     d3.json(url).get(function(error, d) {
-        coinValue.push(d.USD);
+      for(var i = 0; i < d.Data.length; i++) {
+        coinValue.push(d.Data[i].close);
+      }
     });
 
     console.log(coinValue);
@@ -41,10 +50,6 @@
      dates.push(new Date(d.data[i][0]));
    }
   */
-
-
-
-
 
 
 
