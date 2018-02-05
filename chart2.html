@@ -3,58 +3,46 @@
   <head>
     <meta charset="utf-8">
     <title></title>
+
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <!-- Used for formatting time into written month/year format -->
+    <script src="https://d3js.org/d3-time-format.v2.min.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <svg width="960" height="500"></svg>
   </head>
-  <body>
-  <svg width="960" height="500"></svg>
-  <script src="https://d3js.org/d3.v4.min.js"></script>
-  <script>
+    <body>
+    <script>
 
-  var url= 'https://min-api.cryptocompare.com/data/histoday?fsym=ETH&tsym=USD&limit=2&aggregate=3&e=CCCAGG';
-  var coinValue= [];
-  var dates = [];
 
-  // Currents Unix timestamp to 2018-02-05 format
-  function convertUnixTime(unixDate) {
-    var myDate = new Date(unixDate * 1000);
-    return myDate;
-  }
+  var url = "https://min-api.cryptocompare.com/data/histoday?fsym=BTC&tsym=USD&limit=2&aggregate=3&e=CCCAGG";
 
-  // Stores closing daily prices for IOT
+      // This needs to be changed to my API request
   d3.json(url).get(function(error, d) {
-    for(var i = 0; i < d.Data.length; i++) {
-      coinValue.push(d.Data[i].close);
-      dates.push(convertUnixTime(d.Data[i].time));
-    }
 
-  console.log(coinValue);
-  console.log(dates);
+  	var data = d.Data;
+    data.forEach(function(d){ d.time = new Date(d.time * 1000) });
 
-  var svg = d3.select("svg"),
-      margin = {top: 20, right: 20, bottom: 30, left: 50},
-      width = +svg.attr("width") - margin.left - margin.right,
-      height = +svg.attr("height") - margin.top - margin.bottom,
-      g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-  var parseTime = d3.timeParse("%d-%b-%y");
-
-  var x = d3.scaleTime()
-      .rangeRound([0, width]);
-
-  var y = d3.scaleLinear()
-      .rangeRound([height, 0]);
-
-  var line = d3.line()
-      .x(function(d) { return x(d.date); })
-      .y(function(d) { return y(d.close); });
-
-  d3.tsv("data.tsv", function(d) {
-    d.date = parseTime(d.date);
-    d.close = +d.close;
-    return d;
-  }, function(error, data) {
     if (error) throw error;
 
-    x.domain(d3.extent(data, function(d) { return d.date; }));
+    var svg = d3.select("svg"),
+        margin = {top: 20, right: 20, bottom: 30, left: 50},
+        width = +svg.attr("width") - margin.left - margin.right,
+        height = +svg.attr("height") - margin.top - margin.bottom,
+        g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    var parseTime = d3.timeParse("%d-%b-%y");
+
+    var x = d3.scaleTime()
+        .rangeRound([0, width]);
+
+    var y = d3.scaleLinear()
+        .rangeRound([height, 0]);
+
+    var line = d3.line()
+        .x(function(d) { return x(d.time); })
+        .y(function(d) { return y(d.close); });
+
+    x.domain(d3.extent(data, function(d) { return d.time; }));
     y.domain(d3.extent(data, function(d) { return d.close; }));
 
     g.append("g")
@@ -76,15 +64,13 @@
     g.append("path")
         .datum(data)
         .attr("fill", "none")
-        .attr("stroke", "steelblue")
+        .attr("stroke", "#ffc107")
         .attr("stroke-linejoin", "round")
         .attr("stroke-linecap", "round")
         .attr("stroke-width", 1.5)
         .attr("d", line);
   });
-});
 
-</script>
-
+    </script>
   </body>
 </html>
