@@ -65,11 +65,31 @@
         coinValue.push(d.Data[i].close);
         dates.push(convertUnixTime(d.Data[i].time));
       }
-    });
+    
 
     console.log(coinValue);
     console.log(dates);
 
+
+/*    var titles = d3.select('body')
+      .append('h2')
+      .attr("class", "title")
+      .attr("x", (width / 2))
+      .attr("y", 0 - (margin.top / 2))
+      .attr("text-anchor", "middle")
+        .append('h5')
+        .attr("class", "bottom_title")
+        .text("Title goes here")
+    var titles = d3.select('body')
+      .append('h2')
+      .attr("class", "title")
+      .attr("x", (width / 2))
+      .attr("y", 0 - (margin.top / 2))
+      .attr("text-anchor", "middle")
+        .append('h5')
+      .attr("class", "title")
+      .text("U.S. GDP By Year")
+*/
 
 
     yScale = d3.scaleLinear()
@@ -140,6 +160,34 @@
             .attr('y', height)
 
 
+    // Animation Effects
+    .on('mouseover', function(d, i){
+    // Formats dates in written Month/Year format
+    var formatMonth = d3.timeFormat("%B"),
+      formatYear = d3.timeFormat("%Y");
+      date = dates[i];
+    // Concatenate Month/Year for display
+    var displayDate = formatMonth(dates[i]) + ' ' + formatYear(dates[i]);
+    tooltip.transition().duration(200)
+      .style('opacity', .9)
+      .style('background-color', '#2c3e50')
+      .style('color', 'white')
+    tooltip.html(d)
+      .style('left', (d3.event.pageX - 35) + 'px')
+      .style('top', (d3.event.pageY - 90) + 'px')
+      .html('<strong>$' + d + ' Billion' + '<br/>' + displayDate + '</strong>')
+    tempColor = this.style.fill;
+    d3.select(this)
+       .style('fill', '#ecf0f1')
+    })
+    .on('mouseout', function(d){
+    tooltip.transition().duration(500)
+      .style('opacity', 0)
+    d3.select(this)
+       .style('fill', tempColor)
+    });
+
+
     // Y axis guide
     yGuide = d3.select('#chart svg').append('g')
       //.attr('transform', 'translate(40, 0)')
@@ -164,7 +212,7 @@
     .duration(10)
     //.ease(d3.easeBounceOut)
 
-
+  });
 
 
     </script>
