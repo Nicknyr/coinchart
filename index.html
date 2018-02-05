@@ -11,9 +11,50 @@
 
   <style>
 
+    @import url('https://fonts.googleapis.com/css?family=Oswald:500');
+
     body {
-      background-color: darkslategrey;
+      background-color: #bdc3c7;
     }
+
+    #chart {
+      text-align: center;
+      margin-top: 5em;
+    }
+
+    .chart_title {
+      font-size: 3em;
+      text-anchor: middle;
+      fill: black;
+    }
+
+    .bottom_title {
+      font-size: .5em;
+      text-anchor: middle;
+      fill: black;
+      width: 70%;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 36em;
+    }
+
+    .title {
+      font-family: 'Oswald', sans-serif;
+      fill: #666;
+      color: '#2c3e50';
+      text-align: center;
+      margin-top: -20.5em;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 13px;
+      width: 10%;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: .5em;
+    }
+
 
   </style>
 
@@ -37,7 +78,7 @@
    }
   */
 
-    var url= 'https://min-api.cryptocompare.com/data/histoday?fsym=IOT&tsym=USD&limit=2&aggregate=3&e=CCCAGG';
+    var url= 'https://min-api.cryptocompare.com/data/histoday?fsym=ETH&tsym=USD&limit=200&aggregate=3&e=CCCAGG';
     var coinValue = [];
     var dates = [];
     var margin = { top: 0, right: 30, bottom: 90, left: 80 };
@@ -65,7 +106,7 @@
         coinValue.push(d.Data[i].close);
         dates.push(convertUnixTime(d.Data[i].time));
       }
-    
+
 
     console.log(coinValue);
     console.log(dates);
@@ -137,6 +178,7 @@
         d3.select('#chart').append('svg')
         .attr('width', width + margin.left + margin.right)
         .attr('height', height + margin.top + margin.bottom)
+        // Background of chart color
         .style('background', 'whitesmoke')
         .style('box-shadow', '2px 2px 2px 1px rgba(0, 0, 0, .5)')
         .append('g')
@@ -145,8 +187,8 @@
             .selectAll('rect')
             .data(coinValue)
             .enter().append('rect')
-            // Solid green bars
-            .style('fill', '#2ecc71')
+            // Solid gold bars
+            .style('fill', ' #ffc107')
             .attr('fill', function(d, i){
                return colors(i);
              })
@@ -175,10 +217,11 @@
     tooltip.html(d)
       .style('left', (d3.event.pageX - 35) + 'px')
       .style('top', (d3.event.pageY - 90) + 'px')
-      .html('<strong>$' + d + ' Billion' + '<br/>' + displayDate + '</strong>')
+      .html('<strong>$' + d + '<br/>' + displayDate + '</strong>')
     tempColor = this.style.fill;
     d3.select(this)
-       .style('fill', '#ecf0f1')
+      // Bar hover background-color
+       .style('fill', '#191919')
     })
     .on('mouseout', function(d){
     tooltip.transition().duration(500)
