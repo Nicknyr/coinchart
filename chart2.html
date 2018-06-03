@@ -5,18 +5,33 @@
     <title></title>
 
     <script src="https://d3js.org/d3.v4.min.js"></script>
-    <!-- Used for formatting time into written month/year format -->
-    <script src="https://d3js.org/d3-time-format.v2.min.js"></script>
-    <script src="https://d3js.org/d3.v4.min.js"></script>
     <svg width="960" height="500"></svg>
   </head>
+
+    <style>
+
+      body {
+        text-align: center;
+        margin-top: 5em;
+        background-color: #74b9ff;
+      }
+
+      h1 {
+        color: snow;
+      }
+
+
+    </style>
+
+
     <body>
+    <h1>Bitcoin Prices in U.S. dollars</h1>
     <script>
 
 
-  var url = "https://min-api.cryptocompare.com/data/histoday?fsym=BTC&tsym=USD&limit=2&aggregate=3&e=CCCAGG";
+  var url = "https://min-api.cryptocompare.com/data/histoday?fsym=BTC&tsym=USD&limit=200&aggregate=3&e=CCCAGG";
 
-      // This needs to be changed to my API request
+
   d3.json(url).get(function(error, d) {
 
   	var data = d.Data;
@@ -30,13 +45,11 @@
         height = +svg.attr("height") - margin.top - margin.bottom,
         g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    var parseTime = d3.timeParse("%d-%b-%y");
-
     var x = d3.scaleTime()
-        .rangeRound([0, width]);
+        .range([0, width])
 
     var y = d3.scaleLinear()
-        .rangeRound([height, 0]);
+        .range([height, 0]);
 
     var line = d3.line()
         .x(function(d) { return x(d.time); })
@@ -48,26 +61,24 @@
     g.append("g")
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x))
-      .select(".domain")
-        .remove();
 
     g.append("g")
         .call(d3.axisLeft(y))
       .append("text")
         .attr("fill", "#000")
         .attr("transform", "rotate(-90)")
-        .attr("y", 6)
-        .attr("dy", "0.71em")
+        .attr("y", 20)
         .attr("text-anchor", "end")
         .text("Price ($)");
 
     g.append("path")
         .datum(data)
         .attr("fill", "none")
-        .attr("stroke", "#ffc107")
+         // #FFB041
+        .attr("stroke", "#ffeaa7")
         .attr("stroke-linejoin", "round")
         .attr("stroke-linecap", "round")
-        .attr("stroke-width", 1.5)
+        .attr("stroke-width", 2)
         .attr("d", line);
   });
 
